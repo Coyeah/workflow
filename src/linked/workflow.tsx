@@ -26,6 +26,22 @@ export class Noder {
   }
 }
 
+function loop(targetNoder: Noder, func?: Function) {
+  let localNoder: Noder = targetNoder;
+  while (localNoder.next !== null) {
+    localNoder = localNoder.next;
+    func && func(localNoder.id, localNoder);
+    if (localNoder.sibling !== null) {
+      let tempNoder = localNoder;
+      while (tempNoder.sibling !== null) {
+        tempNoder = tempNoder.sibling;
+        func && func(tempNoder.id, tempNoder);
+        loop(tempNoder, func);
+      }
+    }
+  }
+}
+
 export class Linked {
   head: Noder;
   constructor() {
@@ -91,31 +107,21 @@ export class Linked {
     console.info();
     
     let currNoder: Noder = this.head;
-    let count = 0;    
-    function loop(targetNoder: Noder) {
-      let localNoder: Noder = targetNoder;
-      while (localNoder.next !== null) {
-        localNoder = localNoder.next;
-        count++;
-        console.info(localNoder);
-        console.info('============', localNoder.id, '============');
-        if (localNoder.sibling !== null) {
-          let tempNoder = localNoder;
-          while (tempNoder.sibling !== null) {
-            tempNoder = tempNoder.sibling;
-            count++;
-            console.info(tempNoder);
-            console.info('============', tempNoder.id, '============');
-            loop(tempNoder);
-          }
-        }
-      }
-    }
-    loop(currNoder);
+    let count = 0;   
+    const func = (id: string, noder: Noder) => {
+      count++;
+      console.info(noder);
+      console.info('============', noder.id, '============');
+    } 
+    loop(currNoder, func);
 
     console.info();
     console.info('>>>>>>>>>> NODER COUNT ' + count + ' <<<<<<<<<<');
     console.info();
+  }
+  forEach(func: Function) {
+    let currNoder: Noder = this.head;
+    loop(currNoder, func);
   }
   render({
     route: Route,

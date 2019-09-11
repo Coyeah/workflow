@@ -102,18 +102,19 @@ const LinkedPage: React.FC<any> = (props) => {
     setDataMap(map);
   }, [linklist, dataMap]);
 
-  // linklist && linklist.display();
-  console.info(data);
+  linklist && linklist.display();
 
-
+  // 保存数据
   const onSave = useCallback(() => {
-    let saveData = data.map(({ id }: any) => {
-      return dataMap[id]
+    let saveData: any[] = [];
+    linklist && linklist.forEach((id: string) => {
+      saveData.push(dataMap[id]);
     });
+    console.log(saveData);
+    // storage(key, saveData);
+  }, [data, dataMap, linklist]);
 
-    storage(key, saveData);
-  }, [data, dataMap]);
-
+  // console.info(data);
 
   const restProps = {
     addRoute,
