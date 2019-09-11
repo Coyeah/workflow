@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, createContext } from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { FLOW_ITEM } from './enums';
 import { Linked, HEAD_KEY_ID } from './workflow';
 import { flowData } from './config';
@@ -94,12 +94,18 @@ const LinkedPage: React.FC<any> = (props) => {
   }, [linklist, dataMap, data]);
   // 删除节点
   const delRoute = useCallback((key: string) => {
-    linklist.remove(key);
-    const map = {...dataMap};
-    delete map[key];
-    let tempData = data.filter(item => item.id !== key);
-    setData(tempData);
-    setDataMap(map);
+    let target = linklist.find(key);
+    if (target.prevSib === null) {
+      linklist.remove(key);
+      const map = {...dataMap};
+      delete map[key];
+      let tempData = data.filter(item => item.id !== key);
+      setData(tempData);
+      setDataMap(map);
+    } else {
+      message.error('不可删除条件子分支！')
+    }
+
   }, [linklist, dataMap]);
 
   linklist && linklist.display();
@@ -113,8 +119,6 @@ const LinkedPage: React.FC<any> = (props) => {
     console.log(saveData);
     storage(key, saveData);
   }, [data, dataMap, linklist]);
-
-  // console.info(data);
 
   const restProps = {
     addRoute,
