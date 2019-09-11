@@ -9,10 +9,34 @@ const getText = (type: number) => {
   } else {
     return 'Doing someting.'
   }
-} 
-const init = [FLOW_ITEM.BEGIN, FLOW_ITEM.JUDGE, FLOW_ITEM.END];
-export const flowData = init.map(type => ({
-  id: generateUUID(),
-  type,
-  text: getText(type)
-}));
+}
+
+let begin = generateUUID(), end = generateUUID(), judge = generateUUID();
+
+const initMap = {
+  [begin]: {
+    id: begin,
+    type: FLOW_ITEM.BEGIN,
+    text: '开始流程',
+    include: undefined,
+    nodeFrom: null
+  },
+  [judge]: {
+    id: judge,
+    type: FLOW_ITEM.JUDGE,
+    text: '做点什么',
+    include: undefined,
+    nodeFrom: begin
+  },
+  [end]: {
+    id: end,
+    type: FLOW_ITEM.END,
+    text: '结束流程',
+    include: undefined,
+    nodeFrom: judge
+  }
+}
+
+export const flowData = Object.keys(initMap).map(key => ({
+  ...initMap[key]
+}))

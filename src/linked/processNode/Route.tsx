@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { Input, Popover, Button } from 'antd';
 import classNames from 'classnames';
 import { flowContext } from '../index';
@@ -18,8 +18,14 @@ const Route: React.FC<IProps> = ({
   addCondition,
   delRoute,
 }) => {
-  const dataMap: any = useContext(flowContext);
+  const {dataMap, action}: any = useContext(flowContext);
   // console.info(`Route: ${id}: `, dataMap[id]);
+  const onInputChange = useCallback((e) => {
+    let value = e.target.value;
+    let map = {...dataMap};
+    map[id].text = value;
+    action(map);
+  }, [dataMap]);
   const content = (
     <div style={{width: 'max-content'}}>
       <div><a onClick={() => addRoute(id)}>添加节点</a></div>
@@ -34,7 +40,7 @@ const Route: React.FC<IProps> = ({
           <div><b>Route</b> - {id.slice(0,5)}</div>
           {!disabled && <div><a onClick={() => delRoute(id)}>删除节点</a></div>}
         </div>
-        <Input defaultValue={dataMap[id].text} disabled={disabled} />
+        <Input value={dataMap[id].text} onChange={onInputChange} disabled={disabled} />
       </div>
       {dataMap[id].type !== FLOW_ITEM.END && (
         <div className={styles.line}>

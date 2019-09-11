@@ -19,7 +19,7 @@ const Condition: React.FC<IProps> = ({
   delRoute,
   children
 }) => {
-  const dataMap: any = useContext(flowContext);
+  const {dataMap, action}: any = useContext(flowContext);
   const [size, setSize] = useState({
     left: 0,
     right: 0
