@@ -111,7 +111,7 @@ const LinkedPage: React.FC<any> = (props) => {
       saveData.push(dataMap[id]);
     });
     console.log(saveData);
-    // storage(key, saveData);
+    storage(key, saveData);
   }, [data, dataMap, linklist]);
 
   // console.info(data);
